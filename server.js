@@ -9,6 +9,10 @@ require('dotenv').config();
 
 storage.initSync();
 
+var accessToken = '';
+var refreshToken = '';
+var trackUri = '';
+
 function getIDfromUri(uri) {
   var split = uri.split(':');
   return split[2];
@@ -18,57 +22,76 @@ app.use('/public', express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.post("/song", function(req, res) {
-  var scope = 'playlist-modify-private user-read-currently-playing user-read-playback-state user-read-private user-read-email user-read-playback-state playlist-modify-public';
-  storage.setItemSync('trackuri', req.body.submituri);
+app.get('/login', function(req, res) {
+  var scope = 'user-read-email user-read-playback-state playlist-modify-public';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
+      client_id: process.env.CLIENT_ID,
       response_type: 'code',
-      client_id: '69bba9499b994329960c1da43327bed4',
-      scope: scope,
       redirect_uri: 'http://localhost:3000/callback',
       show_dialog: true
-    }));
+    })
+  )
 });
 
-app.get("/callback", function(req, response) {
-  var uri = getIDfromUri(storage.getItemSync('trackuri'));
+app.get('/callback', function(req, res) {
   var code = req.query.code || null;
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
-    headers: {
-      'Authorization': 'Basic ' + (new Buffer(process.env.CLIENT_ID+':'+process.env.CLIENT_SECRET).toString('base64'))
-    },
     form: {
       code: code,
-      redirect_uri: 'http://localhost:3000/callback',
+      redirect_uri: 'http://localhost:3000',
       grant_type: 'authorization_code'
     },
+    headers: {
+      'Authorization': 'Basic ' + (new Buffer(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64'))
+    },
     json: true
-  };
+  }
 
-  request.post(authOptions, function(err, res, body) {
-      var token = body.access_token;
-      var refresh = body.refresh_token;
-      console.log("access: " + token);
-      console.log("refresh: " + refresh);
-      var uri = storage.getItemSync('trackuri');
-      console.log(token);
-      var options = {
-        url: 'https://api.spotify.com/v1/users/matthewstanciu/playlists/5dPp7yV9i8mELe1Kk9UC6D/tracks?uris=spotify%3Atrack%3A'
-          +uri,
-        headers: {
-          'Authorization': 'Bearer ' + token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        json: true
-      };
-      request.get(options, function(error, response, bod) {
-        console.log(bod);
-      });
-  });
-  response.redirect('/refresh_token');
+  request.post(authOptions, function(err, response, body) {
+    var access_token = body.access_token;
+    var refresh_token = body.refresh_token;
+
+    accessToken = access_token;
+    refreshToken = refresh_token;
+    storage.setItemSync('token', accessToken);
+    storage.setItem('refresh', refreshToken);
+
+    var options = {
+      url: 'https://api.spotify.com/v1/me',
+      headers: { 'Authorization': 'Bearer ' + access_token },
+      json: true
+    }
+    request.get(options, function(error, response, body) {
+      console.log("authenticated");
+      console.log(body);
+    });
+    res.redirect('/#' + querystring.stringify({
+      access_token: access_token,
+      refresh_token: refresh_token
+    }))
+  })
+})
+
+app.get("/addsong", function(req, res) {
+  request.post({
+    url: 'https://api.spotify.com/v1/users/matthewstanciu/playlists/5dPp7yV9i8mELe1Kk9UC6D/tracks?uris=spotify%3Atrack%3A'
+    + trackUri,
+    headers: {
+      'Authorization': 'Bearer ' + accessToken,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    json: true
+  })
+  res.redirect('/refresh_token');
+});
+
+app.post('/song', function(req, res) {
+  var uri = getIDfromUri(req.body.submituri);
+  trackUri = uri;
+  res.redirect('/addsong');
 })
 
 app.get('/refresh_token', function(req, res) {
@@ -76,23 +99,26 @@ app.get('/refresh_token', function(req, res) {
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: {
-      'Authorization': 'Basic ' + (new Buffer(process.env.CLIENT_ID+':'+process.env.CLIENT_SECRET).toString('base64'))
+      'Authorization': 'Basic ' + (new Buffer(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64'))
     },
     form: {
       grant_type: 'refresh_token',
-      refresh_token: refresh_token
+      refresh_token: refreshToken
     },
     json: true
   };
 
-  request.post(authOptions, function(error, response, body) {
-    storage.setItemSync('token', body.access_token);
-  });
-  res.redirect('/#access_token=' + body.access_token + '&refresh_token=' + refresh_token);
+  request.post(authOptions, function(err, response, body) {
+    var access_token = body.access_token;
+    accessToken = access_token;
+    storage.setItemSync('toekn', accessToken);
+
+    res.redirect('/#access_token=' + accessToken + '&refresh_token=' + refreshToken);
+  })
 });
 
-app.get("/", function(request, response) {
-  response.sendFile(__dirname + '/index.html');
-});
+app.get("/", function(err, res) {
+  res.sendFile(__dirname + "/index.html");
+})
 
 http.listen(3000);
