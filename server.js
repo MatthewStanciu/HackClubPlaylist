@@ -21,6 +21,12 @@ function getIDfromUri(uri) {
   var split = uri.split(':');
   return split[2];
 }
+function getIDfromUrl(url) {
+  var split1 = url.split('/');
+  var split2 = split1[4].split('?');
+
+  return split2[0];
+}
 var generateRandomString = function(length) {
   var text = '';
   var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -84,7 +90,7 @@ app.get('/callback', function(req, res) {
 
         request.post({
           url: 'https://api.spotify.com/v1/playlists/5dPp7yV9i8mELe1Kk9UC6D/tracks?uris=spotify%3Atrack%3A' +
-            getIDfromUri(storage.getItemSync('uri')),
+            getIDfromUrl(storage.getItemSync('uri')),
           headers: {
             'Authorization': 'Bearer ' + access_token,
             'Host': 'api.spotify.com',
@@ -93,7 +99,7 @@ app.get('/callback', function(req, res) {
           },
           json: true
         });
-        console.log("added " + getIDfromUri(storage.getItemSync('uri')) + " to the playlist");
+        console.log("added " + getIDfromUrl(storage.getItemSync('uri')) + " to the playlist");
 
         res.redirect('/added#' +
           querystring.stringify({
