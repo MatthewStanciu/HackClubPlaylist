@@ -2,7 +2,6 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var request = require('request');
-require('dotenv').config();
 
 function getIDfromUri(uri) {
   var split = uri.split(':');
@@ -11,7 +10,7 @@ function getIDfromUri(uri) {
 
 app.use('/public', express.static('public'));
 
-app.post("/song", function(response, request) {
+app.post("/song", function(response, req) {
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: {
@@ -24,11 +23,11 @@ app.post("/song", function(response, request) {
   };
 
   request.post(authOptions, function(err, res, body) {
-    if (!error && response.statusCode === 200) {
+    if (!err && response.statusCode === 200) {
       var token = body.access_token;
       var options = {
         url: 'https://api.spotify.com/v1/playlists/5dPp7yV9i8mELe1Kk9UC6D/tracks?uris=spotify%3Atrack%3A'
-          +getIDfromUri(req.body.submituri),
+          +getIDfromUri(request.body.submituri),
         headers: {
           'Authorization': 'Bearer ' + token,
           'Accept': 'application/json'
