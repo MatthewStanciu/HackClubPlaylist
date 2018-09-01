@@ -82,16 +82,6 @@ app.get('/callback', function(req, res) {
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
 
-        var options = {
-          url: 'https://api.spotify.com/v1/me',
-          headers: { 'Authorization': 'Bearer ' + access_token },
-          json: true
-        };
-
-        request.get(options, function(error, response, body) {
-          console.log(body);
-        });
-
         request.post({
           url: 'https://api.spotify.com/v1/playlists/5dPp7yV9i8mELe1Kk9UC6D/tracks?uris=spotify%3Atrack%3A' +
             getIDfromUri(storage.getItemSync('uri')),
@@ -103,6 +93,7 @@ app.get('/callback', function(req, res) {
           },
           json: true
         });
+        console.log("added " + getIDfromUri(storage.getItemSync('uri')) + " to the playlist");
 
         res.redirect('/#' +
           querystring.stringify({
