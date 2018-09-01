@@ -17,10 +17,6 @@ var trackUri = '';
 var stateKey = 'spotify_auth_state';
 var redirect_uri = 'http://localhost:3000/callback'
 
-function getIDfromUri(uri) {
-  var split = uri.split(':');
-  return split[2];
-}
 function getIDfromUrl(url) {
   var split1 = url.split('/');
   var split2 = split1[4].split('?');
