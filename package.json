@@ -2,7 +2,6 @@
   "name": "hackclubplaylist",
   "version": "1.0.0",
   "description": "Add any spotify song to west lafayette hack club's playlist!",
-  "main": "index.js",
   "scripts": {
     "start": "node server.js"
   },
