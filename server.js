@@ -95,7 +95,7 @@ app.get('/callback', function(req, res) {
         });
         console.log("added " + getIDfromUri(storage.getItemSync('uri')) + " to the playlist");
 
-        res.redirect('/#' +
+        res.redirect('/added#' +
           querystring.stringify({
             access_token: access_token,
             refresh_token: refresh_token
@@ -141,6 +141,9 @@ app.post('/song', function(req, res) {
 
 app.get("/", function(err, res) {
   res.sendFile(__dirname + "/index.html");
+})
+app.get("/added", function(err, res) {
+  res.sendFile(__dirname + "/added.html");
 })
 
 http.listen(3000);
