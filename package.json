@@ -9,6 +9,8 @@
   "author": "MatthewStanciu",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.3"
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "request": "^2.88.0"
   }
 }
