@@ -30,7 +30,8 @@ app.post("/song", function(response, request) {
         url: 'https://api.spotify.com/v1/playlists/5dPp7yV9i8mELe1Kk9UC6D/tracks?uris=spotify%3Atrack%3A'
           +getIDfromUri(req.body.submituri),
         headers: {
-          'Authorization': 'Bearer ' + token
+          'Authorization': 'Bearer ' + token,
+          'Accept': 'application/json'
         },
         json: true
       };
