@@ -29,6 +29,7 @@ app.get('/login', function(req, res) {
       client_id: process.env.CLIENT_ID,
       response_type: 'code',
       redirect_uri: 'http://localhost:3000/callback',
+      scope: scope,
       show_dialog: true
     })
   )
@@ -52,6 +53,8 @@ app.get('/callback', function(req, res) {
   request.post(authOptions, function(err, response, body) {
     var access_token = body.access_token;
     var refresh_token = body.refresh_token;
+    console.log("access token: " + access_token);
+    console.log("refresh token: " + refresh_token);
 
     accessToken = access_token;
     refreshToken = refresh_token;
@@ -67,7 +70,7 @@ app.get('/callback', function(req, res) {
       console.log("authenticated");
       console.log(body);
     });
-    res.redirect('/#' + querystring.stringify({
+    res.redirect('/addsong#' + querystring.stringify({
       access_token: access_token,
       refresh_token: refresh_token
     }))
@@ -75,27 +78,28 @@ app.get('/callback', function(req, res) {
 })
 
 app.get("/addsong", function(req, res) {
+  console.log("at: " + accessToken);
   request.post({
     url: 'https://api.spotify.com/v1/users/matthewstanciu/playlists/5dPp7yV9i8mELe1Kk9UC6D/tracks?uris=spotify%3Atrack%3A'
     + trackUri,
     headers: {
       'Authorization': 'Bearer ' + accessToken,
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/x-www-form-urlencoded'
     },
     json: true
   })
-  res.redirect('/refresh_token');
 });
 
 app.post('/song', function(req, res) {
   var uri = getIDfromUri(req.body.submituri);
   trackUri = uri;
-  res.redirect('/addsong');
+  res.redirect('/login');
 })
 
 app.get('/refresh_token', function(req, res) {
   var refresh_token = req.query.refresh_token;
+  console.log(req.query);
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: {
@@ -103,17 +107,20 @@ app.get('/refresh_token', function(req, res) {
     },
     form: {
       grant_type: 'refresh_token',
-      refresh_token: refreshToken
+      refresh_token: refresh_token
     },
     json: true
   };
 
   request.post(authOptions, function(err, response, body) {
     var access_token = body.access_token;
+    console.log(body);
+    console.log(access_token);
     accessToken = access_token;
-    storage.setItemSync('toekn', accessToken);
+    storage.setItemSync('token', accessToken);
+    storage.setItemSync('refresh', refreshToken)
 
-    res.redirect('/#access_token=' + accessToken + '&refresh_token=' + refreshToken);
+    res.redirect('/#access_token=' + access_token + '&refresh_token=' + refresh_token);
   })
 });
 
