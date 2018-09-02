@@ -1,2 +1,6 @@
 # HackClubPlaylist
 Add a song to WL Hack Club's Spotify playlist!
+
+I spent a very long time trying to figure out how to properly use the Spotify API, and I couldn't efficiently reach my goal of letting anyone add to my personal playlist (becuase Spotify required authentication by each user). The code you see here is a version that authenticates with my account once, and then continually generates access/refresh tokens when needed. The [actual code on Glitch](https://glitch.com/edit/#!/hackclubplaylist) requires that every hour, I manually put in an access key that my account generates. I generate these keys from running [hackclubplaylistadmin](https://glitch.com/edit/#!/hackclubplaylistadmin) and manually copy/pasting the key I get into hackclubplaylist. Because of this, this probably won't work most of the time.
+
+There is a way to synchronize these automatically and make it so that I don't have to do it manually every time, but I spent way too much time on this and I really don't want to work some more on it. If you would like to work on it for me, PRs would be greatly, greatly appreciated. Otherwise, if you find this is not working and you want to add a song, let me know and I'll refresh the access token for you.
