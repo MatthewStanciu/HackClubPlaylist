@@ -15,6 +15,7 @@
     "express": "^4.16.3",
     "node-persist": "^2.1.0",
     "querystring": "^0.2.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "spotify-refresh": "^2.0.3"
   }
 }
