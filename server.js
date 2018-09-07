@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser');
 var request = require('request');
 var storage = require('node-persist');
 var querystring = require('querystring');
+var refresh = require('spotify-refresh');
 require('dotenv').config();
 
 storage.initSync();
@@ -84,18 +85,7 @@ app.get('/callback', function(req, res) {
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
 
-        request.post({
-          url: 'https://api.spotify.com/v1/playlists/5dPp7yV9i8mELe1Kk9UC6D/tracks?uris=spotify%3Atrack%3A' +
-            getIDfromUrl(storage.getItemSync('uri')),
-          headers: {
-            'Authorization': 'Bearer ' + access_token,
-            'Host': 'api.spotify.com',
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          json: true
-        });
-        console.log("added " + getIDfromUrl(storage.getItemSync('uri')) + " to the playlist");
+
 
         res.redirect('/added#' +
           querystring.stringify({
@@ -112,32 +102,24 @@ app.get('/callback', function(req, res) {
   }
 });
 
-app.get('/refresh_token', function(req, res) {
-
-  var refresh_token = req.query.refresh_token;
-  var authOptions = {
-    url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (new Buffer(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64')) },
-    form: {
-      grant_type: 'refresh_token',
-      refresh_token: refresh_token
-    },
-    json: true
-  };
-
-  request.post(authOptions, function(error, response, body) {
-    if (!error && response.statusCode === 200) {
-      var access_token = body.access_token;
-      res.send({
-        'access_token': access_token
-      });
-    }
-  });
-});
-
 app.post('/song', function(req, res) {
-  storage.setItemSync('uri',req.body.submituri);
-  res.redirect("/login");
+  refresh(process.env.REFRESH_TOKEN, process.env.CLIENT_ID, process.env.CLIENT_SECRET, function(err, res, body) {
+    if (err) return err;
+    request.post({
+      url: 'https://api.spotify.com/v1/playlists/5dPp7yV9i8mELe1Kk9UC6D/tracks?uris=spotify%3Atrack%3A' +
+        getIDfromUrl(req.body.submituri),
+      headers: {
+        'Authorization': 'Bearer ' + body.access_token,
+        'Host': 'api.spotify.com',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      json: true
+    });
+  });
+
+  console.log("added " + getIDfromUrl(req.body.submituri) + " to the playlist");
+  res.redirect("/added");
 })
 
 
