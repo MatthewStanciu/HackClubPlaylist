@@ -33,7 +33,7 @@ app.post('/song', function(req, res) {
     if (err) return err;
     request.post({
       url: 'https://api.spotify.com/v1/playlists/5dPp7yV9i8mELe1Kk9UC6D/tracks?uris=spotify%3Atrack%3A' +
-        getIDfromUrl(req.body.submituri),
+        getIDfromUrl(req.body.submiturl),
       headers: {
         'Authorization': 'Bearer ' + body.access_token,
         'Host': 'api.spotify.com',
@@ -44,7 +44,7 @@ app.post('/song', function(req, res) {
     });
   });
 
-  console.log("added " + getIDfromUrl(req.body.submituri) + " to the playlist");
+  console.log("added " + getIDfromUrl(req.body.submiturl) + " to the playlist");
   res.redirect("/added");
 })
 
