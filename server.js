@@ -9,10 +9,8 @@ require('dotenv').config();
 var redirect_uri = 'http://localhost:3000/callback'
 
 function getIDfromUrl(url) {
-  var split1 = url.split('/');
-  var split2 = split1[4].split('?');
-
-  return split2[0];
+  var split = url.split(/[?/]+/);
+  return split[3];
 }
 
 app.use('/public', express.static('public'));
