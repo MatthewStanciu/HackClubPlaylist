@@ -12,9 +12,6 @@ require('dotenv').config();
 
 storage.initSync();
 
-var accessToken = '';
-var refreshToken = '';
-var trackUri = '';
 var stateKey = 'spotify_auth_state';
 var redirect_uri = 'http://localhost:3000/callback'
 
