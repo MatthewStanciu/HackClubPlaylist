@@ -23,6 +23,15 @@ body {
 	-moz-animation: Gradient 15s ease infinite;
 	animation: Gradient 15s ease infinite;
 }
+a {
+  color: white;
+  transition: 0.3s;
+  text-decoration: none;
+}
+a:hover {
+  color: #c9c9c9;
+  transition: 0.3s;
+}
 form, iframe, button {
   display:table;
   margin:auto;
