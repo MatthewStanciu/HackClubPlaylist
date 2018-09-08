@@ -1,12 +1,9 @@
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
-var cors = require('cors');
 var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
 var request = require('request');
 var storage = require('node-persist');
-var querystring = require('querystring');
 var refresh = require('spotify-refresh');
 require('dotenv').config();
 
@@ -25,8 +22,6 @@ function getIDfromUrl(url) {
 app.use('/public', express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors());
-app.use(cookieParser());
 
 app.post('/song', function(req, res) {
   refresh(process.env.REFRESH_TOKEN, process.env.CLIENT_ID, process.env.CLIENT_SECRET, function(err, res, body) {
