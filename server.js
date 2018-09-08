@@ -3,11 +3,8 @@ var app = express();
 var http = require('http').Server(app);
 var bodyParser = require('body-parser');
 var request = require('request');
-var storage = require('node-persist');
 var refresh = require('spotify-refresh');
 require('dotenv').config();
-
-storage.initSync();
 
 var stateKey = 'spotify_auth_state';
 var redirect_uri = 'http://localhost:3000/callback'
