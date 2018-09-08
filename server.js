@@ -6,7 +6,6 @@ var request = require('request');
 var refresh = require('spotify-refresh');
 require('dotenv').config();
 
-var stateKey = 'spotify_auth_state';
 var redirect_uri = 'http://localhost:3000/callback'
 
 function getIDfromUrl(url) {
