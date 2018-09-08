@@ -23,9 +23,12 @@ body {
 	-moz-animation: Gradient 15s ease infinite;
 	animation: Gradient 15s ease infinite;
 }
-form {
+form, iframe, button {
   display:table;
   margin:auto;
+}
+iframe {
+  padding-top: 15px;
 }
 input {
   border-radius: 25px;
