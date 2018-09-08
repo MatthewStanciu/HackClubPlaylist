@@ -44,7 +44,7 @@ app.post('/song', function(req, res) {
     });
   });
 
-  console.log("added " + getIDfromUrl(req.body.submiturl) + " to the playlist");
+  console.log("added " + req.body.submiturl + " to the playlist");
   res.redirect("/added");
 })
 
