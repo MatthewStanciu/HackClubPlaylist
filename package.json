@@ -11,7 +11,6 @@
     "body-parser": "^1.18.3",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
-    "node-spotify-api": "^1.0.7",
     "request": "^2.88.0",
     "spotify-refresh": "^2.0.3"
   }
