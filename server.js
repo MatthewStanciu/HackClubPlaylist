@@ -12,12 +12,6 @@ spotify.setRefreshToken(process.env.REFRESH_TOKEN);
 spotify.setClientId(process.env.CLIENT_ID);
 spotify.setClientSecret(process.env.CLIENT_SECRET);
 
-trackUri = "";
-
-function getIDfromUrl(url) {
-  var split = url.split(/[?/]+/);
-  return split[3];
-}
 function getIDfromUri(uri) {
   var split = uri.split(/[:\"]+/);
   return split[3];
