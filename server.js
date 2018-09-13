@@ -39,6 +39,7 @@ app.use(bodyParser.json());
 app.post('/song', function(req, res) {
   var track = (req.body.submiturl);
   var artist = (req.body.submitartist);
+
   if (artist != "") {
     spotify.searchTracks('track:'+track+ ' artist:'+ artist)
     .then(function(data) {
@@ -58,11 +59,13 @@ app.post('/song', function(req, res) {
       console.log(err);
     })
   }
+
   res.redirect('/added');
 })
 
 app.get("/", function(err, res) {
   res.sendFile(__dirname + "/index.html");
+  
   spotify.refreshAccessToken().then(function(data) {
     spotify.setAccessToken(data.body['access_token']);
   },function(err) {
