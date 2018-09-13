@@ -23,6 +23,21 @@ function getIDfromUri(uri) {
   return split[3];
 }
 
+function post(uri) {
+  request.post({
+    url: 'https://api.spotify.com/v1/playlists/5dPp7yV9i8mELe1Kk9UC6D/tracks?uris=spotify%3Atrack%3A' +
+      getIDfromUri(uri),
+    headers: {
+      'Authorization': 'Bearer ' + spotify.getAccessToken(),
+      'Host': 'api.spotify.com',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Content-Length': 0
+    },
+    json: true
+  });
+}
+
 app.use('/public', express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -30,26 +45,23 @@ app.use(bodyParser.json());
 app.post('/song', function(req, res) {
   var track = (req.body.submiturl);
   var artist = (req.body.submitartist);
-  console.log(spotify.getAccessToken());
-  spotify.searchTracks('track:'+track+ ' artist:'+ artist)
-  .then(function(data) {
-    var uri = JSON.stringify(data.body['tracks']['items'][0]['uri']);
-    console.log(uri);
-      request.post({
-        url: 'https://api.spotify.com/v1/playlists/5dPp7yV9i8mELe1Kk9UC6D/tracks?uris=spotify%3Atrack%3A' +
-          getIDfromUri(uri),
-        headers: {
-          'Authorization': 'Bearer ' + spotify.getAccessToken(),
-          'Host': 'api.spotify.com',
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Content-Length': 0
-        },
-        json: true
-      });
-  }, function(err) {
-    console.log('Something wong!', err);
-  })
+  if (artist != "") {
+    spotify.searchTracks('track:'+track+ ' artist:'+ artist)
+    .then(function(data) {
+      var uri = JSON.stringify(data.body['tracks']['items'][0]['uri']);
+      post(uri);
+    }, function(err) {
+      console.log(err);
+    })
+  } else {
+    spotify.searchTracks(track)
+    .then(function(data) {
+      var uri = JSON.stringify(data.body['tracks']['items'][0]['uri']);
+      post(uri)
+    }, function(err) {
+      console.log(err);
+    })
+  }
 
   res.redirect('/added');
 })
