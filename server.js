@@ -52,7 +52,7 @@ app.post('/song', function(req, res) {
   } else {
     spotify.searchTracks(track)
     .then(function(data) {
-      var uri = JSON.stringify(data.body['tracks']['items'][0]['uri']);
+      var uri = data.body['tracks']['items'][0]['uri'];
       post(uri);
       console.log("added " + track + " to the playlist!");
     }, function(err) {
