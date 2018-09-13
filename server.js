@@ -44,8 +44,8 @@ app.post('/song', function(req, res) {
     spotify.searchTracks('track:'+track+ ' artist:'+ artist)
     .then(function(data) {
       var uri = JSON.stringify(data.body['tracks']['items'][0]['uri']);
-      console.log("added " + track + " by " + artist +" to the playlist!");
       post(uri);
+      console.log("added " + track + " by " + artist +" to the playlist!");
     }, function(err) {
       console.log(err);
     })
@@ -53,8 +53,8 @@ app.post('/song', function(req, res) {
     spotify.searchTracks(track)
     .then(function(data) {
       var uri = JSON.stringify(data.body['tracks']['items'][0]['uri']);
+      post(uri);
       console.log("added " + track + " to the playlist!");
-      post(uri)
     }, function(err) {
       console.log(err);
     })
@@ -65,7 +65,7 @@ app.post('/song', function(req, res) {
 
 app.get("/", function(err, res) {
   res.sendFile(__dirname + "/index.html");
-  
+
   spotify.refreshAccessToken().then(function(data) {
     spotify.setAccessToken(data.body['access_token']);
   },function(err) {
