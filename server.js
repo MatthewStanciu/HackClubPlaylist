@@ -44,7 +44,6 @@ app.post('/song', function(req, res) {
     spotify.searchTracks('track:'+track+ ' artist:'+ artist)
     .then(function(data) {
       var uri = JSON.stringify(data.body['tracks']['items'][0]['uri']);
-      console.log(uri);
       post(uri);
       console.log("added " + track + " by " + artist +" to the playlist!");
     }, function(err) {
