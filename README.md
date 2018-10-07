@@ -5,5 +5,5 @@ Add a song to WL Hack Club's Spotify playlist!
 
 Hack Club is a worldwide community of programming clubs, dedicated to teaching students code and giving them the resources they need to create their own projects and events. You can check them out [here](https://hackclub.com/) and do their workshops [here](https://hackclub.com/workshops/)
 
-
-I'm the president of the West Lafayette chapter, and I created this to experiment with playlists and develop a song list for meetings.
+# Why I created this
+I wanted a fun way for the members of my Hack Club to contribute to a collaborative playlist without needing a Spotify account. Surprisingly, I couldn't find anything like this online, so I made it myself! This was the first (and certainly not the last) time I've ever dived into using REST APIs.
