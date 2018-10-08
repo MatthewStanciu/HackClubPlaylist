@@ -1,14 +1,30 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-    <head>
-      <link rel="stylesheet" href="./public/style.css">
-    </head>
-    <body>
-        <form action="/song" method="post" id="urlform">
-          <input class="url" name="submiturl" type="text" placeholder="Enter the song title" autofocus>
-          <input class="artist" name="submitartist" type="text" placeholder="Enter the artist name">
-        </form>
-        <button form="urlform"><strong>Add to playlist</strong></button>
-        <iframe src="https://open.spotify.com/embed/user/matthewstanciu/playlist/5dPp7yV9i8mELe1Kk9UC6D" width="350" height="450" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-    </body>
+<head>
+  <title>State High Hack Club Music</title>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,800" rel="stylesheet">
+  <link rel="stylesheet" href="./public/style.css">
+</head>
+<body>
+  <a href="https://statehigh.hackclub.com" target="_blank">
+    <img src="https://statehigh.hackclub.com/logo-primary.svg" width="256" alt="State High Hack Club logo">
+  </a>
+  <h1>
+    Music
+  </h1>
+  <div class="sheet">
+    <form action="/song" method="post" id="urlform">
+      <label>
+        Song name
+        <input class="url" name="submiturl" type="text" placeholder="Bloom" autofocus>
+      </label>
+      <label>
+        Song artist
+        <input class="artist" name="submitartist" type="text" placeholder="Troye Sivan">
+      </label>
+    </form>
+    <button form="urlform" type="submit">Add to playlist</button>
+  </div>
+  <iframe src="https://open.spotify.com/embed/user/lachlanjc/playlist/1GFcGQfzTuluKXn6chPi8O" width="384" height="512" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+</body>
 </html>

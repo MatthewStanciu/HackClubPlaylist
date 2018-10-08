@@ -1,11 +1,11 @@
 {
-  "name": "hackclubplaylist",
+  "name": "schacks-music",
   "version": "1.0.0",
-  "description": "Add any spotify song to west lafayette hack club's playlist!",
+  "description": "Add any Spotify song to State High Hack Club’s playlist!",
   "scripts": {
     "start": "node server.js"
   },
-  "author": "MatthewStanciu",
+  "author": "Lachlan Campbell <lachlan@hackclub.com>",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
