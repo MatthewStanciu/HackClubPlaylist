@@ -46,12 +46,12 @@ app.post('/song', (req, res) => {
         var isExplicit = JSON.stringify(data.body['tracks']['items'][0]['explicit'])
         if (isExplicit === "true") {
           console.log(`requested song ${track} not added because it's explicit`)
-          return res.sendFile(__dirname + '/index.html');
+          return res.sendFile(__dirname + '/index.html')
         }
         else {
-          post(uri);
-          console.log(`added ${track} by ${artist} to the playlist!`);
-          return res.sendFile(__dirname + '/added.html');
+          post(uri)
+          console.log(`added ${track} by ${artist} to the playlist!`)
+          return res.sendFile(__dirname + '/added.html')
         }
       },
       err => {
@@ -64,12 +64,12 @@ app.post('/song', (req, res) => {
         const uri = JSON.stringify(data.body['tracks']['items'][0]['uri'])
         if (isExplicit === "true") {
           console.log(`requested song ${track} not added because it's explicit`)
-          return res.sendFile(__dirname + '/index.html');
+          return res.sendFile(__dirname + '/index.html')
         }
         else {
           post(uri);
-          console.log(`added ${track} to the playlist!`);
-          return res.sendFile(__dirname + '/added.html');
+          console.log(`added ${track} to the playlist!`)
+          return res.sendFile(__dirname + '/added.html')
         }
       },
       err => {
