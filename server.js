@@ -43,7 +43,7 @@ app.post('/song', (req, res) => {
     spotify.searchTracks(`track:${track} artist:${artist}`).then(
       data => {
         const uri = JSON.stringify(data.body['tracks']['items'][0]['uri'])
-        var isExplicit = JSON.stringify(data.body['tracks']['items'][0]['explicit'])
+        const isExplicit = JSON.stringify(data.body['tracks']['items'][0]['explicit'])
         if (isExplicit === "true") {
           console.log(`requested song ${track} not added because it's explicit`)
           return res.sendFile(__dirname + '/index.html')
@@ -62,6 +62,7 @@ app.post('/song', (req, res) => {
     spotify.searchTracks(track).then(
       data => {
         const uri = JSON.stringify(data.body['tracks']['items'][0]['uri'])
+        const isExplicit = JSON.stringify(data.body['tracks']['items'][0]['explicit'])
         if (isExplicit === "true") {
           console.log(`requested song ${track} not added because it's explicit`)
           return res.sendFile(__dirname + '/index.html')
