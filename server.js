@@ -18,9 +18,11 @@ function getIDfromUri(uri) {
   return split[3]
 }
 
-const post = (uri) =>
+const post = uri =>
   request.post({
-    url: `https://api.spotify.com/v1/playlists/1GFcGQfzTuluKXn6chPi8O/tracks?uris=spotify%3Atrack%3A${getIDfromUri(uri)}`,
+    url: `https://api.spotify.com/v1/playlists/1GFcGQfzTuluKXn6chPi8O/tracks?uris=spotify%3Atrack%3A${getIDfromUri(
+      uri
+    )}`,
     headers: {
       Authorization: `Bearer ${spotify.getAccessToken()}`,
       Host: 'api.spotify.com',
@@ -43,8 +45,17 @@ app.post('/song', (req, res) => {
     spotify.searchTracks(`track:${track} artist:${artist}`).then(
       data => {
         const uri = JSON.stringify(data.body['tracks']['items'][0]['uri'])
-        post(uri)
-        console.log(`added ${track} by ${artist} to the playlist!`)
+        const isExplicit = JSON.stringify(
+          data.body['tracks']['items'][0]['explicit']
+        )
+        if (isExplicit === 'true') {
+          console.log(`requested song ${track} not added because it's explicit`)
+          return res.sendFile(__dirname + '/index.html')
+        } else {
+          post(uri)
+          console.log(`added ${track} by ${artist} to the playlist!`)
+          return res.sendFile(__dirname + '/added.html')
+        }
       },
       err => {
         console.log(err)
@@ -54,16 +65,23 @@ app.post('/song', (req, res) => {
     spotify.searchTracks(track).then(
       data => {
         const uri = JSON.stringify(data.body['tracks']['items'][0]['uri'])
-        post(uri)
-        console.log(`added ${track} to the playlist!`)
+        const isExplicit = JSON.stringify(
+          data.body['tracks']['items'][0]['explicit']
+        )
+        if (isExplicit === 'true') {
+          console.log(`requested song ${track} not added because it's explicit`)
+          return res.sendFile(__dirname + '/index.html')
+        } else {
+          post(uri)
+          console.log(`added ${track} to the playlist!`)
+          return res.sendFile(__dirname + '/added.html')
+        }
       },
       err => {
         console.log(err)
       }
     )
   }
-
-  res.redirect('/added')
 })
 
 app.get('/', (err, res) => {
