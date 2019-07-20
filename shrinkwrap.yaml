@@ -268,7 +268,6 @@ packages:
       node: '>= 0.10.0'
     resolution:
       integrity: sha1-avilAjUNsyRuzEvs9rWjTSL37VM=
-      tarball: 'http://registry.npmjs.org/express/-/express-4.16.3.tgz'
   /extend/3.0.2:
     dev: false
     resolution:
@@ -390,7 +389,6 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha1-i1VoC7S+KDoLW/TqLjhYC+HZMg0=
-      tarball: 'http://registry.npmjs.org/http-errors/-/http-errors-1.6.3.tgz'
   /http-signature/1.2.0:
     dependencies:
       assert-plus: 1.0.0
@@ -628,7 +626,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-tQtKA9WIAhBF3+VLAseyMqZeBjW0AHJoxOtYqSUZNJxauErmLbVm2FW1y+J/YA9dUrAC39ITejlZWhVIwawkKw==
-      tarball: 'http://registry.npmjs.org/readable-stream/-/readable-stream-2.3.6.tgz'
   /request-promise-core/1.1.1/request@2.88.0:
     dependencies:
       lodash: 4.17.11
@@ -805,7 +802,6 @@ packages:
       node: '>= 0.10'
     resolution:
       integrity: sha1-cDUpoHFOV+EjlZ3e+84ZOy5Q0RU=
-      tarball: 'http://registry.npmjs.org/superagent/-/superagent-2.3.0.tgz'
   /tough-cookie/2.4.3:
     dependencies:
       psl: 1.1.29

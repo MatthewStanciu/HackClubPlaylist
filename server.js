@@ -41,47 +41,25 @@ app.post('/song', (req, res) => {
   const track = req.body.submiturl
   const artist = req.body.submitartist
 
-  if (artist != '') {
-    spotify.searchTracks(`track:${track} artist:${artist}`).then(
-      data => {
-        const uri = JSON.stringify(data.body['tracks']['items'][0]['uri'])
-        const isExplicit = JSON.stringify(
-          data.body['tracks']['items'][0]['explicit']
-        )
-        if (isExplicit === 'true') {
-          console.log(`requested song ${track} not added because it's explicit`)
-          return res.sendFile(__dirname + '/index.html')
-        } else {
-          post(uri)
-          console.log(`added ${track} by ${artist} to the playlist!`)
-          return res.sendFile(__dirname + '/added.html')
-        }
-      },
-      err => {
-        console.log(err)
+  spotify.searchTracks(artist != '' ? `track:${track} artist:${artist}` : track).then(
+    data => {
+      const uri = JSON.stringify(data.body['tracks']['items'][0]['uri'])
+      const isExplicit = JSON.stringify(
+        data.body['tracks']['items'][0]['explicit']
+      )
+      if (isExplicit === 'true') {
+        console.log(`requested song ${track} not added because it's explicit`)
+        return res.sendFile(__dirname + '/index.html')
+      } else {
+        post(uri)
+        console.log(`added ${track} to the playlist!`)
+        return res.sendFile(__dirname + '/added.html')
       }
-    )
-  } else {
-    spotify.searchTracks(track).then(
-      data => {
-        const uri = JSON.stringify(data.body['tracks']['items'][0]['uri'])
-        const isExplicit = JSON.stringify(
-          data.body['tracks']['items'][0]['explicit']
-        )
-        if (isExplicit === 'true') {
-          console.log(`requested song ${track} not added because it's explicit`)
-          return res.sendFile(__dirname + '/index.html')
-        } else {
-          post(uri)
-          console.log(`added ${track} to the playlist!`)
-          return res.sendFile(__dirname + '/added.html')
-        }
-      },
-      err => {
-        console.log(err)
-      }
-    )
-  }
+    },
+    err => {
+      console.log(err)
+    }
+  )
 })
 
 app.get('/', (err, res) => {
