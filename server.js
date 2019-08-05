@@ -18,9 +18,11 @@ function getIDfromUri(uri) {
   return split[3]
 }
 
-const post = (uri) =>
+const post = uri =>
   request.post({
-    url: `https://api.spotify.com/v1/playlists/5dPp7yV9i8mELe1Kk9UC6D/tracks?uris=spotify%3Atrack%3A${getIDfromUri(uri)}`,
+    url: `https://api.spotify.com/v1/playlists/5dPp7yV9i8mELe1Kk9UC6D/tracks?uris=spotify%3Atrack%3A${getIDfromUri(
+      uri
+    )}`,
     headers: {
       Authorization: `Bearer ${spotify.getAccessToken()}`,
       Host: 'api.spotify.com',
@@ -39,35 +41,19 @@ app.post('/song', (req, res) => {
   const track = req.body.submiturl
   const artist = req.body.submitartist
 
-  if (artist != '') {
-    spotify.searchTracks(`track:${track} artist:${artist}`).then(
+  spotify
+    .searchTracks(artist != '' ? `track:${track} artist:${artist}` : track)
+    .then(
       data => {
         const uri = JSON.stringify(data.body['tracks']['items'][0]['uri'])
-        var isExplicit = JSON.stringify(data.body['tracks']['items'][0]['explicit'])
-        if (isExplicit === "true") {
+        const isExplicit = JSON.stringify(
+          data.body['tracks']['items'][0]['explicit']
+        )
+        if (isExplicit === 'true') {
           console.log(`requested song ${track} not added because it's explicit`)
           return res.sendFile(__dirname + '/index.html')
-        }
-        else {
+        } else {
           post(uri)
-          console.log(`added ${track} by ${artist} to the playlist!`)
-          return res.sendFile(__dirname + '/added.html')
-        }
-      },
-      err => {
-        console.log(err)
-      }
-    )
-  } else {
-    spotify.searchTracks(track).then(
-      data => {
-        const uri = JSON.stringify(data.body['tracks']['items'][0]['uri'])
-        if (isExplicit === "true") {
-          console.log(`requested song ${track} not added because it's explicit`)
-          return res.sendFile(__dirname + '/index.html')
-        }
-        else {
-          post(uri);
           console.log(`added ${track} to the playlist!`)
           return res.sendFile(__dirname + '/added.html')
         }
@@ -76,7 +62,6 @@ app.post('/song', (req, res) => {
         console.log(err)
       }
     )
-  }
 })
 
 app.get('/', (err, res) => {
