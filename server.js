@@ -38,8 +38,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.post('/song', (req, res) => {
-  const track = req.body.submiturl
-  const artist = req.body.submitartist
+  const track = req.body.submiturl.replace(/\'/g, '')
+  const artist = req.body.submitartist.replace(/\'/g, '')
 
   spotify
     .searchTracks(artist != '' ? `track:${track} artist:${artist}` : track)
